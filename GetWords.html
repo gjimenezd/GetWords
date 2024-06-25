@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetWords</title>
+
+    <style>
+        body {
+            background-color: rgb(47, 47, 47);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        textarea,
+        #output {
+            width: 100%;
+            min-height: 45%;
+            background-color: rgb(34, 34, 34);
+            color: orange;
+            border: none;
+            /* font-size: large; */
+            /* overflow: scroll; */
+        }
+
+        .commands {
+            margin: 10px 0;
+            /* justify-content: end; */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        label {
+            color: white;
+            margin-right: 0px 20px;
+            flex-grow: 1;
+        }
+
+        input {
+            text-align: center;
+            width: 50px;
+            margin: 0px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="input"><textarea name="" id="input" onblur="GetTheWords()" placeholder="Pegar texto aquí"></textarea></div>
+        <div class="commands">
+            <div>
+                <label for="">Words:</label>
+                <input type="text" name="" id="wordCount" value="0" disabled>
+            </div>
+            <div>
+                <label for="separator">Separator</label>
+                <input type="text" name="" id="separator" onblur="GetTheWords()" value=" - ">
+            </div>
+            <div>
+                <label for="">Min word size:</label>
+                <input type="number" name="" id="minWordSize" onblur="GetTheWords()" value="1" min="1">
+            </div>
+            <div>
+                <label for="">Unique:</label>
+                <input type="number" name="" id="uniqueWords" onblur="GetTheWords()" value="1" min="0">
+            </div>
+            <div>
+                <label for="">Ignore words:</label>
+                <input type="number" name="" id="ignoreWords" onblur="GetTheWords()" value="1" min="0">
+            </div>
+            <!-- <button onclick="GetTheWords()">Words</button> -->
+        </div>
+        <div id="output"></div>
+    </div>
+</body>
+<script src="GetWords.js"></script>
+
+</html>
