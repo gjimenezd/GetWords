@@ -68,7 +68,11 @@
                 <label for="">Ignore words:</label>
                 <input type="number" name="" id="ignoreWords" onblur="GetTheWords()" value="1" min="0">
             </div>
-            <!-- <button onclick="GetTheWords()">Words</button> -->
+            <div>
+                <label for="">Ignore numbers:</label>
+                <input type="number" name="" id="ignoreNumbers" onblur="GetTheWords()" value="1" min="0">
+            </div>
+            <button onclick="GetIgnoredWords()">Ignored</button>
         </div>
         <div id="output"></div>
     </div>

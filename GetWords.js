@@ -5,7 +5,11 @@ let wordCount = document.getElementById("wordCount");
 let minWordSize = document.getElementById("minWordSize");
 let uniqueWords = document.getElementById("uniqueWords");
 let ignoreWords = document.getElementById("ignoreWords");
+let ignoreNumbers = document.getElementById("ignoreNumbers");
 let word_count = 0;
+let outputText = "";
+
+const ignoredWords = new Set();
 
 const ignoredSet = new Set([
     // Articles
@@ -31,7 +35,7 @@ const ignoredSet = new Set([
     "furthermore", "hence", "however", "if", "indeed", "instead", "lest", "likewise", "long", "many", "meanwhile",
     "moreover", "much", "neither", "nevertheless", "next", "no", "nonetheless", "not", "now", "once", "only", "order",
     "otherwise", "provided", "rather", "scarcely", "similarly", "soon", "sooner", "still", "subsequently", "such",
-    "supposing", "than", "then", "therefore", "though", "thus", "till", "time", "whenever", "wherever", "whether",
+    "supposing", "than", "then", "therefore", "though", "thus", "till", "time", "whenever", "wherever", "whether", "wow",
 
     "ok", "itself",
 
@@ -45,24 +49,29 @@ const ignoredSet = new Set([
     "versus", "vía",
 
     // Pronouns
-    "yo", "tú", "él", "ella", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas",
+    "yo", "tú", "él", "ella", "nosotros", "nosotras", "vosotros", "vosotras", "ello", "ellos", "ellas",
     "me", "te", "se", "nos", "os",
     "mi", "tu", "su", "nuestro", "nuestra", "vuestro", "vuestra", "mis", "tus", "sus", "nuestros", "nuestras", "vuestros", "vuestras",
     "este", "esta", "estos", "estas", "ese", "esa", "esos", "esas", "aquel", "aquella", "aquellos", "aquellas",
     "que", "quien", "quienes", "cuyo", "cuya", "cuyos", "cuyas", "cual", "cuales",
 
     // Conjunctions
-    "aunque", "como", "cuando", "donde", "e", "entonces", "mas","mientras", "ni", "no","o", "pero", "pesar", "porque", "pronto", "pues", "si", "sino", "tan", "u", "y", "ya",
+    "aaj" ,"abur" ,"adiós" ,"agur" ,"ah" ,"ahí" ,"alto" ,"antes" ,"apenas" ,"ar" ,"arre" ,"arrea" ,"así" ,"aun" ,"aunque" ,"ay" ,"aúpa" ,"bah" ,"bien" ,"bravo" ,"brrr" ,"caramba" ,"chao" ,"chas" ,"chist" ,"chit" ,"chitón" ,"cielos" ,"como" ,"consiguiente" ,"cuando" ,"cuanto" ,"dado" ,"después" ,"donde" ,"ea" ,"eh" ,"ende" ,"entonces" ,"epa" ,"eso" ,"ey" ,"forma" ,"fuera" ,"guau" ,"hala" ,"hale" ,"hola" ,"huy" ,"igual" ,"luego" ,"manera" ,"mas" ,"mejor" ,"menos" ,"miau" ,"mientras" ,"mismo" ,"modo" ,"muu" ,"más" ,"ni" ,"oh" ,"ojalá" ,"ole" ,"olé" ,"paf" ,"peor" ,"pero" ,"pesar" ,"pif" ,"plaf" ,"plash" ,"porque" ,"pronto" ,"psé" ,"puaj" ,"pues" ,"puesto" ,"pum" ,"salvo" ,"sea" ,"ser" ,"shhh" ,"si" ,"siempre" ,"sino" ,"suerte" ,"tal" ,"tan" ,"tanto" ,"uau" ,"uf" ,"uh" ,"uy" ,"venga" ,"visto" ,"ya" ,"zape" ,"zas" ,"zaz" ,"órale" ,
+
 
     //????
-    "del"
+    "del",
+    
+    // "sin embargo"
 
 ]);
 
-function GetWords(str = document.body.outerText, separator = "\n", minWordSize = 1, uniqueWords = 1, ignoreWords = 1) {
+function GetWords(str = document.body.outerText, separator = "\n", minWordSize = 1, uniqueWords = 1, ignoreWords = 1, ignoreNumbers = 1) {
 
     let wordCount = 0;
     let lastWord = "";
+
+    ignoredWords.clear();
 
     if (str == "") {
         str = document.body.outerText;
@@ -84,7 +93,16 @@ function GetWords(str = document.body.outerText, separator = "\n", minWordSize =
     //Usando Regex
     //HTML Unicode (UTF-8) Reference - https://www.w3schools.com/charsets/ref_html_utf8.asp
 
-    str = str.replace(/[^-@A-Za-zÀ-ÖØ-öø-ÿ]/gi, " "); //Remplaza todo lo que no sea letra o @ con un espacio " "
+    if (ignoreNumbers == 1) {
+        
+        str = str.replace(/[^-@A-Za-zÀ-ÖØ-öø-ÿ]/gi, " "); //Remplaza todo lo que no sea letra o @ con un espacio " "
+        
+    } else {
+        
+        str = str.replace(/[^-@0-9A-Za-zÀ-ÖØ-öø-ÿ]/gi, " "); //Remplaza todo lo que no sea letra o @ con un espacio " "
+    }
+    
+    
     str = str.toLowerCase();
     let crossArray = str.split(" ");
     
@@ -98,11 +116,19 @@ function GetWords(str = document.body.outerText, separator = "\n", minWordSize =
     str = "";
 
     for (c of crossArray) {
-        if (c != lastWord && c.length > minWordSize) {
+        if (c != lastWord) {
+
+            if (c.length <= minWordSize) {
+                ignoredWords.add(c);
+                continue;
+            }
 
 
             if (ignoreWords == 1) {
-                if (ignoredSet.has(c)) continue;
+                if (ignoredSet.has(c)) {
+                    ignoredWords.add(c);
+                    continue;
+                }
             }
 
             wordCount++;
@@ -124,6 +150,18 @@ function GetWords(str = document.body.outerText, separator = "\n", minWordSize =
 
 
 function GetTheWords() {
-    output.innerHTML = GetWords(input.value, separator.value, minWordSize.value, uniqueWords.value, ignoreWords.value);
+    output.innerHTML = GetWords(input.value, separator.value, minWordSize.value, uniqueWords.value, ignoreWords.value, ignoreNumbers.value);
     wordCount.value = word_count;
+}
+
+function GetIgnoredWords() {
+    
+    let str = "";
+    for (c of ignoredWords) {
+        str += c + separator.value;
+    }
+
+    output.innerHTML = str;
+    wordCount.value = ignoredWords.size;
+
 }
